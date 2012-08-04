@@ -39,13 +39,17 @@ function OnGUI() {
     lpf.envMod = GUI.HorizontalSlider(Rect(0.1 * sw, 0.3 * sh, 0.8 * sw, 0.1 * sh), lpf.envMod, 0.0, 1.0);
 }
 
-function OnAudioRead(data : float[]) {
-    for (var i = 0; i < data.Length; i++) {
+function OnAudioFilterRead(data : float[], channels : int) {
+    // Asserts channels == 2
+    for (var i = 0; i < data.Length; i += 2) {
         if (isRunning && seq.Run()) {
             osc.SetNote(seq.currentNote);
             env.Bang();
         }
-        data[i] = amp.Run(lpf.Run(osc.Run()));
+        data[i] = data[i + 1] = amp.Run(lpf.Run(osc.Run()));
         env.Update();
     }
+}
+
+function OnAudioRead(data : float[]) {
 }
