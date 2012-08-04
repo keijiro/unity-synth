@@ -2,15 +2,18 @@
 
 class Sequencer {
     private var notes : int[];
+    private var triggers : boolean[];
     private var position = -1;
     
     private var delta = 0.0;
     private var counter = 1.0;
     
     var currentNote = -1;
+    var currentTrigger = false;
     
-    function Sequencer(aBpm : int, initNotes : int[]) {
+    function Sequencer(aBpm : int, initNotes : int[], initTriggers : boolean[]) {
         notes = initNotes;
+        triggers = initTriggers;
         delta = 4.0 * aBpm / (SynthConfig.kSampleRate * 60); 
     }
 
@@ -18,6 +21,7 @@ class Sequencer {
         position = -1;
         counter = 1.0;
         currentNote = -1;
+        currentTrigger = false;
     }
 
     function Run() {
@@ -25,12 +29,8 @@ class Sequencer {
         
         if (bang) {
             if (++position == notes.Length) position = 0;
-            var note = notes[position];
-            if (note >= 0) {
-                currentNote = note;
-            } else {
-                bang = false;
-            }
+            currentNote = notes[position];
+            currentTrigger = triggers[position];
             counter -= 1.0;
         }
         
