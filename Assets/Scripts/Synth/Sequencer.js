@@ -14,10 +14,10 @@ class Sequencer {
         delta = 4.0 * aBpm / (SynthConfig.kSampleRate * 60); 
     }
 
-    function ResetPosition(sampleCount : int) {
-/*        position = -1;
+    function Reset() {
+        position = -1;
         counter = 1.0;
-        currentNote = -1;*/
+        currentNote = -1;
     }
 
     function Run() {

@@ -14,8 +14,11 @@ private var seq = Sequencer(124, [
     30, 42, 29, 30
 ]);
 
+private var isRunning = false;
+
 function Awake() {
-    audio.clip = AudioClip.Create("Oscillator", 0xfffffff, 1, SynthConfig.kSampleRate, false, true, OnAudioRead, OnAudioSetPosition);
+    audio.clip = AudioClip.Create("Oscillator", 0xfffffff, 1, SynthConfig.kSampleRate, false, true, OnAudioRead);
+    audio.Play();
 }
 
 function OnGUI() {
@@ -23,11 +26,12 @@ function OnGUI() {
     var sh = Screen.height;
 
     if (GUI.Button(Rect(0.25 * sw, 0.4 * sh, 0.25 * sw, 0.2 * sh), "PLAY")) {
-        audio.Play();
+        seq.Reset();
+        isRunning = true;
     }
 
     if (GUI.Button(Rect(0.5 * sw, 0.4 * sh, 0.25 * sw, 0.2 * sh), "STOP")) {
-        audio.Stop();
+        isRunning = false;
     }
 
     lpf.cutoff = GUI.HorizontalSlider(Rect(0.1 * sw, 0.1 * sh, 0.8 * sw, 0.1 * sh), lpf.cutoff, 0.0, 1.0);
@@ -37,15 +41,11 @@ function OnGUI() {
 
 function OnAudioRead(data : float[]) {
     for (var i = 0; i < data.Length; i++) {
-        if (seq.Run()) {
+        if (isRunning && seq.Run()) {
             osc.SetNote(seq.currentNote);
             env.Bang();
         }
         data[i] = amp.Run(lpf.Run(osc.Run()));
         env.Update();
     }
-}
-
-function OnAudioSetPosition(newPosition:int) {
-    seq.ResetPosition(newPosition);
 }
