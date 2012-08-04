@@ -2,6 +2,8 @@
 
 @script RequireComponent(AudioSource)
 
+var skin : GUISkin;
+
 private var osc = Oscillator();
 private var env = Envelope();
 private var lpf = LowPassFilter(env);
@@ -29,20 +31,45 @@ function Awake() {
 function OnGUI() {
     var sw = Screen.width;
     var sh = Screen.height;
+    
+    GUI.skin = skin;
+    
+    GUILayout.BeginArea(Rect(0.1 * sw, 0.2 * sh, 0.8 * sw, 0.6 * sh));
+    GUILayout.BeginVertical();
+    
+    GUILayout.BeginHorizontal();
+    GUILayout.Label("Cutoff", GUILayout.Width(0.2 * sw));
+    lpf.cutoff = GUILayout.HorizontalSlider(lpf.cutoff, 0.0, 1.0);
+    GUILayout.EndHorizontal();
+    
+    GUILayout.BeginHorizontal();
+    GUILayout.Label("Resonance", GUILayout.Width(0.2 * sw));
+    lpf.resonance = GUILayout.HorizontalSlider(lpf.resonance, 0.0, 1.0);
+    GUILayout.EndHorizontal();
 
-    if (GUI.Button(Rect(0.25 * sw, 0.5 * sh, 0.25 * sw, 0.2 * sh), "PLAY")) {
+    GUILayout.BeginHorizontal();
+    GUILayout.Label("EnvMod", GUILayout.Width(0.2 * sw));
+    lpf.envMod = GUILayout.HorizontalSlider(lpf.envMod, 0.0, 1.0);
+    GUILayout.EndHorizontal();
+
+    GUILayout.BeginHorizontal();
+    GUILayout.Label("Decay", GUILayout.Width(0.2 * sw));
+    env.release = GUILayout.HorizontalSlider(env.release, 0.0, 0.4); 
+    GUILayout.EndHorizontal();
+
+    GUILayout.BeginHorizontal();
+    if (GUILayout.Button("PLAY")) {
         seq.Reset();
         isRunning = true;
     }
-
-    if (GUI.Button(Rect(0.5 * sw, 0.5 * sh, 0.25 * sw, 0.2 * sh), "STOP")) {
+    
+    if (GUILayout.Button("STOP")) {
         isRunning = false;
     }
-
-    lpf.cutoff = GUI.HorizontalSlider(Rect(0.1 * sw, 0.1 * sh, 0.8 * sw, 0.1 * sh), lpf.cutoff, 0.0, 1.0);
-    lpf.resonance = GUI.HorizontalSlider(Rect(0.1 * sw, 0.2 * sh, 0.8 * sw, 0.1 * sh), lpf.resonance, 0.0, 1.0);
-    lpf.envMod = GUI.HorizontalSlider(Rect(0.1 * sw, 0.3 * sh, 0.8 * sw, 0.1 * sh), lpf.envMod, 0.0, 1.0);
-    env.release = GUI.HorizontalSlider(Rect(0.1 * sw, 0.4 * sh, 0.8 * sw, 0.1 * sh), env.release, 0.0, 0.4); 
+    GUILayout.EndHorizontal();
+    
+    GUILayout.EndVertical();
+    GUILayout.EndArea();
 }
 
 function OnAudioFilterRead(data : float[], channels : int) {
