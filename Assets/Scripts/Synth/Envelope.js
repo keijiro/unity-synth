@@ -1,14 +1,14 @@
 #pragma strict
 
 class Envelope {
-    private var minTime = 0.04;
+    private var minTime = 0.003;
     private var delta = 0.0;
     
     var release = 0.2;
     var current = 0.0;
 
     function Bang() {
-        delta = minTime * SynthConfig.kSampleRate;
+        delta = 1.0 / (minTime * SynthConfig.kSampleRate);
     }
 
     function Update() {
