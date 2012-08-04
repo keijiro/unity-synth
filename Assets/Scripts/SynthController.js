@@ -42,7 +42,7 @@ function OnGUI() {
     lpf.cutoff = GUI.HorizontalSlider(Rect(0.1 * sw, 0.1 * sh, 0.8 * sw, 0.1 * sh), lpf.cutoff, 0.0, 1.0);
     lpf.resonance = GUI.HorizontalSlider(Rect(0.1 * sw, 0.2 * sh, 0.8 * sw, 0.1 * sh), lpf.resonance, 0.0, 1.0);
     lpf.envMod = GUI.HorizontalSlider(Rect(0.1 * sw, 0.3 * sh, 0.8 * sw, 0.1 * sh), lpf.envMod, 0.0, 1.0);
-    env.release = GUI.HorizontalSlider(Rect(0.1 * sw, 0.4 * sh, 0.8 * sw, 0.1 * sh), env.release, 0.01, 0.6); 
+    env.release = GUI.HorizontalSlider(Rect(0.1 * sw, 0.4 * sh, 0.8 * sw, 0.1 * sh), env.release, 0.0, 0.4); 
 }
 
 function OnAudioFilterRead(data : float[], channels : int) {
