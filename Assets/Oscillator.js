@@ -48,17 +48,20 @@ class LowPassFilter {
 	var kSampleRate = 44100.0;
 	
 	function Reset(f0 : float) {
-		var p = Mathf.Sqrt(2.0);
-		var fp = f0 / kSampleRate;
-		var w0 = Mathf.Tan(Mathf.PI * fp);
-		var k1 = p * w0;
-		var k2 = w0 * w0;
-		a0 = k2 / (1.0 + k1 + k2);
-		a1 = 2.0 * a0;
-		a2 = a0;
-		b1 = 2.0 * a0 * (1.0 / k2 - 1.0);
-		b2 = 1.0 - (a0 + a1 + a2 + b1);
-		Debug.Log(a0);
+		if (f0 > 0.01) {
+			var p = Mathf.Sqrt(2.0);
+			var fp = f0 / kSampleRate;
+			var w0 = Mathf.Tan(Mathf.PI * fp);
+			var k1 = p * w0;
+			var k2 = w0 * w0;
+			a0 = k2 / (1.0 + k1 + k2);
+			a1 = 2.0 * a0;
+			a2 = a0;
+			b1 = 2.0 * a0 * (1.0 / k2 - 1.0);
+			b2 = 1.0 - (a0 + a1 + a2 + b1);
+		} else {
+			a0 = a1 = a2 = b1 = b2 = 0.0;
+		}
 	}
 	
 	function Update(x : float) {
@@ -111,6 +114,7 @@ class VCFilter {
 
 private var seq : Sequencer;
 private var filter : LowPassFilter;
+private var vcf : VCFilter;
 
 function Awake() {
 	seq = Sequencer(kSampleRate, kBpm, [
@@ -125,6 +129,7 @@ function Awake() {
 	]);
 	
 	filter = LowPassFilter();
+	vcf = VCFilter();
 	
 	clip = AudioClip.Create("Oscillator", kSampleRate * 60 * 60, 1, kSampleRate, false, true, OnAudioRead, OnAudioSetPosition);
 	audio.clip = clip;
@@ -142,14 +147,15 @@ function OnGUI() {
 		audio.Stop();
 	}
 	
-	filter.cutoff = GUI.HorizontalSlider(Rect(0.1 * sw, 0.1 * sh, 0.8 * sw, 0.1 * sh), filter.cutoff, -10000.0, 10000.0);
-//	filter.resonance = GUI.HorizontalSlider(Rect(0.1 * sw, 0.2 * sh, 0.8 * sw, 0.1 * sh), filter.resonance, -10.0, 10.0);
+	filter.cutoff = GUI.HorizontalSlider(Rect(0.1 * sw, 0.1 * sh, 0.8 * sw, 0.1 * sh), filter.cutoff, 0.0, 10000.0);
+	vcf.cutoff = filter.cutoff;
+	vcf.resonance = GUI.HorizontalSlider(Rect(0.1 * sw, 0.2 * sh, 0.8 * sw, 0.1 * sh), vcf.resonance, 0.0, 1.0);
 	
 	filter.Reset(filter.cutoff);
 }
 
 function GetNoteFreq(note : int) {
-	var interval = note - 69;
+	var interval = note - 69 - 12;
 	return 440.0 * Mathf.Pow(2, interval / 12.0);
 }
 
@@ -159,7 +165,7 @@ function OnAudioRead(data : float[]) {
 		if (note >= 0) {
 			level += 1.0 * GetNoteFreq(note) / kSampleRate;
 			if (level > 1.0) level -= 2.0;
-			data[count] = Mathf.Clamp(filter.Update(0.75 * level), -0.8, 0.8);
+			data[count] = Mathf.Clamp(vcf.Update(filter.Update(0.75 * level)), -0.8, 0.8);
 		} else {
 			data[count] = 0;
 		}
