@@ -3,8 +3,9 @@
 @script RequireComponent(AudioSource)
 
 private var osc = Oscillator();
-private var lpf = LowPassFilter();
-private var amp = Amplifier();
+private var env = Envelope();
+private var lpf = LowPassFilter(env);
+private var amp = Amplifier(env);
 
 private var seq = Sequencer(124, [
     30, 30, 42, 30,
@@ -31,15 +32,17 @@ function OnGUI() {
 
     lpf.cutoff = GUI.HorizontalSlider(Rect(0.1 * sw, 0.1 * sh, 0.8 * sw, 0.1 * sh), lpf.cutoff, 0.0, 1.0);
     lpf.resonance = GUI.HorizontalSlider(Rect(0.1 * sw, 0.2 * sh, 0.8 * sw, 0.1 * sh), lpf.resonance, 0.0, 4.0);
+    lpf.envMod = GUI.HorizontalSlider(Rect(0.1 * sw, 0.3 * sh, 0.8 * sw, 0.1 * sh), lpf.envMod, 0.0, 1.0);
 }
 
 function OnAudioRead(data : float[]) {
     for (var i = 0; i < data.Length; i++) {
         if (seq.Run()) {
             osc.SetNote(seq.currentNote);
-            amp.Bang();
+            env.Bang();
         }
-        data[i] = amp.Run(lpf.Filter(osc.Run()));
+        data[i] = amp.Run(lpf.Run(osc.Run()));
+        env.Update();
     }
 }
 
