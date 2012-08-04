@@ -1,25 +1,41 @@
 #pragma strict
 
 class Sequencer {
-    var notes : int[];
-    var samplesPerStep : int;
-    var position : int;
-
+    private var notes : int[];
+    private var position = -1;
+    
+    private var delta = 0.0;
+    private var counter = 1.0;
+    
+    var currentNote = -1;
+    
     function Sequencer(aBpm : int, initNotes : int[]) {
         notes = initNotes;
-        samplesPerStep = SynthConfig.kSampleRate * 60 / (aBpm * 4);
+        delta = 4.0 * aBpm / (SynthConfig.kSampleRate * 60); 
     }
 
-    function Read() {
-        var note = notes[position / samplesPerStep];
-        position++;
-        if (position >= notes.Length * samplesPerStep) {
-            position -= notes.Length * samplesPerStep;
+    function ResetPosition(sampleCount : int) {
+/*        position = -1;
+        counter = 1.0;
+        currentNote = -1;*/
+    }
+
+    function Run() {
+        var bang = (counter >= 1.0);
+        
+        if (bang) {
+            if (++position == notes.Length) position = 0;
+            var note = notes[position];
+            if (note >= 0) {
+                currentNote = note;
+            } else {
+                bang = false;
+            }
+            counter -= 1.0;
         }
-        return note;
-    }
-
-    function Reset() {
-        position = 0;
+        
+        counter += delta;
+        
+        return bang;
     }
 }

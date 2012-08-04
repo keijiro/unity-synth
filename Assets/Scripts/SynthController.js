@@ -4,16 +4,13 @@
 
 private var osc = Oscillator();
 private var lpf = LowPassFilter();
+private var amp = Amplifier();
 
 private var seq = Sequencer(124, [
-    60, 60, 60, -1,
-    62, 62, 62, -1,
-    64, 64, 64, -1,
-    65, 65, 65, -1,
-    67, 67, 67, -1,
-    69, 69, 69, -1,
-    71, 71, 71, -1,
-    72, 72, 72, -1
+    30, 30, 42, 30,
+    30, 29, 30, 29,
+    30, 30, 42, 30,
+    30, 42, 29, 30
 ]);
 
 function Awake() {
@@ -38,16 +35,14 @@ function OnGUI() {
 
 function OnAudioRead(data : float[]) {
     for (var i = 0; i < data.Length; i++) {
-        var note = seq.Read();
-        if (note >= 0) {
-            osc.SetNote(note);
-            data[i] = 0.5 * lpf.Filter(osc.Run()) + 0.5;
-        } else {
-            data[i] = 0;
+        if (seq.Run()) {
+            osc.SetNote(seq.currentNote);
+            amp.Bang();
         }
+        data[i] = amp.Run(lpf.Filter(osc.Run()));
     }
 }
 
 function OnAudioSetPosition(newPosition:int) {
-    seq.position = newPosition;
+    seq.ResetPosition(newPosition);
 }
