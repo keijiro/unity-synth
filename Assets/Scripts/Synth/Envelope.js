@@ -11,6 +11,7 @@ class Envelope {
     }
 
     function Update() {
+        release = Mathf.Clamp(release, 0.001, 10.0);
         current = Mathf.Max(0.0, current - 1.0 / (release * SynthConfig.kSampleRate));
     }
 }

@@ -25,7 +25,7 @@ class LowPassFilter {
     }
     
     function Run(input : float) {
-        var f = (cutoff + env.current * envMod) * 1.16;
+        var f = Mathf.Clamp01(cutoff + env.current * envMod) * 1.16;
         var fb = resonance * (1.0 - 0.15 * f * f);
         var x = input - o4 * fb;
         x *= 0.35013 * (f * f) * (f * f);
