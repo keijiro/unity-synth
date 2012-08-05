@@ -281,3 +281,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f6264cebe9f04557a64aba569a79dd0, type: 1}
   m_Name: 
   skin: {fileID: 11400000, guid: b47690a39549c4dcdb5089d69fc3d46a, type: 2}
+  clips:
+  - {fileID: 8300000, guid: 6dc5444ddb214406b94f06b3cc9970c9, type: 1}

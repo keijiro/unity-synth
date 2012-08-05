@@ -4,10 +4,14 @@
 
 var skin : GUISkin;
 
+var clips : AudioClip[];
+
 private var osc = Oscillator();
 private var env = Envelope();
 private var lpf = LowPassFilter(env);
 private var amp = Amplifier(env);
+
+private var sampler = Sampler();
 
 private var seq = Sequencer(124, [
     30, 30, 42, 30,
@@ -29,6 +33,8 @@ function Awake() {
     if (AudioSettings.outputSampleRate != SynthConfig.kSampleRate) {
         AudioSettings.outputSampleRate = SynthConfig.kSampleRate;
     }
+    
+    sampler.Load(clips[0]);
 
     audio.clip = AudioClip.Create("Oscillator", 0xfffffff, 1, SynthConfig.kSampleRate, false, true, OnAudioRead);
     audio.Play();
@@ -98,9 +104,12 @@ function OnAudioFilterRead(data : float[], channels : int) {
     for (var i = 0; i < data.Length; i += 2) {
         if (isRunning && seq.Run()) {
             osc.SetNote(seq.currentNote);
-            if (seq.currentTrigger) env.Bang();
+            if (seq.currentTrigger) {
+                env.Bang();
+                sampler.Bang();
+            }
         }
-        data[i] = data[i + 1] = amp.Run(lpf.Run(osc.Run()));
+        data[i] = data[i + 1] = amp.Run(lpf.Run(osc.Run())) + sampler.Run();
         env.Update();
     }
 }
