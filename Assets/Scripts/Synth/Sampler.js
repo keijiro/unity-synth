@@ -3,6 +3,7 @@
 class Sampler {
     private var samples = [0.0];
     private var position = 0;
+    var volume = 1.0;
     
     function Load(clip : AudioClip) {
         samples = new float[clip.samples];
@@ -16,7 +17,7 @@ class Sampler {
     
     function Run() {
         if (position < samples.Length) {
-            return samples[position++];
+            return samples[position++] * volume;
         } else {
             return 0.0;
         }

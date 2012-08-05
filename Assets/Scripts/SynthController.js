@@ -12,7 +12,7 @@ private var lpf = LowPassFilter(env);
 private var amp = Amplifier(env);
 
 private var samplers : Sampler[];
-private var mseq = MatrixSequencer(124, 5, 8);
+private var mseq = MatrixSequencer(124, 5, 16);
 
 private var seq = Sequencer(124, [
     30, 30, 42, 30,
@@ -35,15 +35,14 @@ function Awake() {
         AudioSettings.outputSampleRate = SynthConfig.kSampleRate;
     }
     
-    mseq.SetTrack(0, [true, false, false, false, true, false, false, false]);
-    mseq.SetTrack(1, [false, false, false, false, true, false, false, false]);
-    mseq.SetTrack(2, [true, true, true, false, true, true, true, false]);
+    mseq.SetTrack(0, [true, false, false, false, true, false, false, false, true, false, false, false, true, false, false, false]);
     
     samplers = new Sampler[clips.Length];
     for (var i = 0; i < clips.Length; i++) {
         samplers[i] = Sampler();
         samplers[i].Load(clips[i]);
     }
+    samplers[2].volume = 0.1;
 
     audio.clip = AudioClip.Create("Oscillator", 0xfffffff, 1, SynthConfig.kSampleRate, false, true, OnAudioRead);
     audio.Play();
@@ -72,6 +71,14 @@ function OnGUI() {
         GUILayout.EndVertical();
     }
     GUILayout.EndHorizontal();
+
+    for (var row = 0; row < mseq.triggers.GetLength(0); row++) {
+        GUILayout.BeginHorizontal();
+        for (var col = 0; col < mseq.triggers.GetLength(1); col++) {
+            mseq.triggers[row, col] = GUILayout.Toggle(mseq.triggers[row, col], "");
+        }
+        GUILayout.EndHorizontal();
+    }
     
     GUILayout.BeginHorizontal();
     GUILayout.Label("Cutoff", GUILayout.Width(0.2 * sw));
