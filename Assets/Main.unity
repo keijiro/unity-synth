@@ -86,6 +86,8 @@ GameObject:
   - 92: {fileID: 780153960}
   - 124: {fileID: 780153961}
   - 81: {fileID: 780153959}
+  - 170: {fileID: 780153962}
+  - 164: {fileID: 780153963}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -153,6 +155,37 @@ Behaviour:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 780153956}
   m_Enabled: 1
+--- !u!170 &780153962
+AudioDistortionFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 780153956}
+  m_Enabled: 1
+  m_DistortionLevel: .5
+--- !u!164 &780153963
+AudioReverbFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 780153956}
+  m_Enabled: 1
+  m_DryLevel: 0
+  m_Room: -1000
+  m_RoomHF: -100
+  m_RoomRolloff: 0
+  m_DecayTime: 1.49000001
+  m_DecayHFRatio: .829999983
+  m_ReflectionsLevel: -2602
+  m_ReverbLevel: 200
+  m_ReverbDelay: .0109999999
+  m_Diffusion: 100
+  m_Density: 100
+  m_HFReference: 5000
+  m_RoomLF: 0
+  m_LFReference: 250
+  m_ReflectionsDelay: 0
+  m_ReverbPreset: 1
 --- !u!1 &1367179077
 GameObject:
   m_ObjectHideFlags: 0
