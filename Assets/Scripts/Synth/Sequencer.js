@@ -1,8 +1,9 @@
 #pragma strict
 
 class Sequencer {
-    private var notes : int[];
-    private var triggers : boolean[];
+    var notes : int[];
+    var triggers : boolean[];
+    
     private var position = -1;
     
     private var delta = 0.0;
