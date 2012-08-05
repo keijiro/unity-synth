@@ -10,6 +10,6 @@ class Amplifier {
     }
     
     function Run(input : float) {
-        return input * env.current;
+        return input * level * env.current;
     }
 }
