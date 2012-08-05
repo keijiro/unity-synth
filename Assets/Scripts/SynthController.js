@@ -2,49 +2,51 @@
 
 @script RequireComponent(AudioSource)
 
+var bpm = 124.0;
 var skin : GUISkin;
+var drumClips : AudioClip[];
 
-var clips : AudioClip[];
+private var isRunning = false;
 
 private var osc = Oscillator();
 private var env = Envelope();
 private var lpf = LowPassFilter(env);
 private var amp = Amplifier(env);
+private var seq : Sequencer;
 
-private var samplers : Sampler[];
-private var mseq = MatrixSequencer(124, 5, 16);
+private var drums : Sampler[];
+private var drumSeq : MatrixSequencer;
 
-private var seq = Sequencer(124, [
-    30, 30, 42, 30,
-    30, 29, 30, 29,
-    30, 30, 42, 30,
-    30, 42, 29, 30
-],[
-    true, true, true, true,
-    true, true, false, true,
-    true, false, false, true,
-    true, true, false, true
-]);
-
-private var isRunning = false;
-
-function Awake() {
-    Application.targetFrameRate = 30;
+function Start() {
+    lpf.cutoff = 0.2;
+    lpf.envMod = 0.2;
     
-    if (AudioSettings.outputSampleRate != SynthConfig.kSampleRate) {
-        AudioSettings.outputSampleRate = SynthConfig.kSampleRate;
+    seq = Sequencer(bpm, [
+        30, 30, 42, 30,
+        30, 29, 30, 29,
+        30, 30, 42, 30,
+        30, 42, 29, 30
+    ],[
+        true, true, true, true,
+        true, true, false, true,
+        true, false, false, true,
+        true, true, false, true
+    ]);
+    
+    drums = new Sampler[drumClips.Length];
+    for (var i = 0; i < drumClips.Length; i++) {
+        drums[i] = Sampler(drumClips[i]);
     }
     
-    mseq.SetTrack(0, [true, false, false, false, true, false, false, false, true, false, false, false, true, false, false, false]);
+    drumSeq = MatrixSequencer(bpm, drumClips.Length, 16);
+    drumSeq.SetTrack(0, [
+        true, false, false, false,
+        true, false, false, false,
+        true, false, false, false,
+        true, false, false, false
+    ]);
     
-    samplers = new Sampler[clips.Length];
-    for (var i = 0; i < clips.Length; i++) {
-        samplers[i] = Sampler();
-        samplers[i].Load(clips[i]);
-    }
-    samplers[2].volume = 0.1;
-
-    audio.clip = AudioClip.Create("Oscillator", 0xfffffff, 1, SynthConfig.kSampleRate, false, true, OnAudioRead);
+    audio.clip = AudioClip.Create("(null)", 0xfffffff, 1, SynthConfig.kSampleRate, false, true, function(data:float[]){});
     audio.Play();
 }
 
@@ -72,13 +74,18 @@ function OnGUI() {
     }
     GUILayout.EndHorizontal();
 
-    for (var row = 0; row < mseq.triggers.GetLength(0); row++) {
+    GUILayout.BeginHorizontal();
+    GUILayout.Label("Drums");
+    GUILayout.BeginVertical();
+    for (var row = drumSeq.triggers.GetLength(0) - 1; row >= 0 ; row--) {
         GUILayout.BeginHorizontal();
-        for (var col = 0; col < mseq.triggers.GetLength(1); col++) {
-            mseq.triggers[row, col] = GUILayout.Toggle(mseq.triggers[row, col], "");
+        for (var col = 0; col < drumSeq.triggers.GetLength(1); col++) {
+            drumSeq.triggers[row, col] = GUILayout.Toggle(drumSeq.triggers[row, col], "");
         }
         GUILayout.EndHorizontal();
     }
+    GUILayout.EndVertical();
+    GUILayout.EndHorizontal();
     
     GUILayout.BeginHorizontal();
     GUILayout.Label("Cutoff", GUILayout.Width(0.2 * sw));
@@ -89,6 +96,8 @@ function OnGUI() {
     GUILayout.Label("Resonance", GUILayout.Width(0.2 * sw));
     lpf.resonance = GUILayout.HorizontalSlider(lpf.resonance, 0.0, 1.0);
     GUILayout.EndHorizontal();
+
+    amp.level = 1.0 + lpf.resonance * 1.6;
 
     GUILayout.BeginHorizontal();
     GUILayout.Label("EnvMod", GUILayout.Width(0.2 * sw));
@@ -103,6 +112,7 @@ function OnGUI() {
     GUILayout.BeginHorizontal();
     if (GUILayout.Button("PLAY")) {
         seq.Reset();
+        drumSeq.Reset();
         isRunning = true;
     }
     
@@ -124,18 +134,15 @@ function OnAudioFilterRead(data : float[], channels : int) {
                 env.Bang();
             }
         }
-        if (isRunning && mseq.Run()) {
-            for (var tr = 0; tr < mseq.triggers.GetLength(0); tr++) {
-                if (mseq.GetCurrent(tr)) samplers[tr].Bang();
+        if (isRunning && drumSeq.Run()) {
+            for (var tr = 0; tr < drumSeq.triggers.GetLength(0); tr++) {
+                if (drumSeq.GetCurrent(tr)) drums[tr].Bang();
             }
         }
 
         var x = amp.Run(lpf.Run(osc.Run()));
-        for (var sampler in samplers) x += sampler.Run();
+        for (var sampler in drums) x += sampler.Run();
         data[i] = data[i + 1] = x;
         env.Update();
     }
-}
-
-function OnAudioRead(data : float[]) {
 }

@@ -5,7 +5,7 @@ class Sampler {
     private var position = 0;
     var volume = 1.0;
     
-    function Load(clip : AudioClip) {
+    function Sampler(clip : AudioClip) {
         samples = new float[clip.samples];
         clip.GetData(samples, 0);
         position = samples.Length;
