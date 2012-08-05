@@ -11,7 +11,8 @@ private var env = Envelope();
 private var lpf = LowPassFilter(env);
 private var amp = Amplifier(env);
 
-private var sampler = Sampler();
+private var samplers : Sampler[];
+private var mseq = MatrixSequencer(124, 5, 8);
 
 private var seq = Sequencer(124, [
     30, 30, 42, 30,
@@ -34,7 +35,15 @@ function Awake() {
         AudioSettings.outputSampleRate = SynthConfig.kSampleRate;
     }
     
-    sampler.Load(clips[0]);
+    mseq.SetTrack(0, [true, false, false, false, true, false, false, false]);
+    mseq.SetTrack(1, [false, false, false, false, true, false, false, false]);
+    mseq.SetTrack(2, [true, true, true, false, true, true, true, false]);
+    
+    samplers = new Sampler[clips.Length];
+    for (var i = 0; i < clips.Length; i++) {
+        samplers[i] = Sampler();
+        samplers[i].Load(clips[i]);
+    }
 
     audio.clip = AudioClip.Create("Oscillator", 0xfffffff, 1, SynthConfig.kSampleRate, false, true, OnAudioRead);
     audio.Play();
@@ -106,10 +115,17 @@ function OnAudioFilterRead(data : float[], channels : int) {
             osc.SetNote(seq.currentNote);
             if (seq.currentTrigger) {
                 env.Bang();
-                sampler.Bang();
             }
         }
-        data[i] = data[i + 1] = amp.Run(lpf.Run(osc.Run())) + sampler.Run();
+        if (isRunning && mseq.Run()) {
+            for (var tr = 0; tr < mseq.triggers.GetLength(0); tr++) {
+                if (mseq.GetCurrent(tr)) samplers[tr].Bang();
+            }
+        }
+
+        var x = amp.Run(lpf.Run(osc.Run()));
+        for (var sampler in samplers) x += sampler.Run();
+        data[i] = data[i + 1] = x;
         env.Update();
     }
 }

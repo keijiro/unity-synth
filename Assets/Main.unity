@@ -282,4 +282,8 @@ MonoBehaviour:
   m_Name: 
   skin: {fileID: 11400000, guid: b47690a39549c4dcdb5089d69fc3d46a, type: 2}
   clips:
+  - {fileID: 8300000, guid: 38f60a7098f4f420998d9834e1dd88ce, type: 1}
+  - {fileID: 8300000, guid: 067f3f794bc364f36949898bc2e6d840, type: 1}
   - {fileID: 8300000, guid: 6dc5444ddb214406b94f06b3cc9970c9, type: 1}
+  - {fileID: 8300000, guid: 16c0ec1a70798410cbfb0196e5371c70, type: 1}
+  - {fileID: 8300000, guid: b1996720676024e7d975329aaac0f719, type: 1}
