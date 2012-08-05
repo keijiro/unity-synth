@@ -24,6 +24,12 @@ private var seq = Sequencer(124, [
 private var isRunning = false;
 
 function Awake() {
+    Application.targetFrameRate = 30;
+    
+    if (AudioSettings.outputSampleRate != SynthConfig.kSampleRate) {
+        AudioSettings.outputSampleRate = SynthConfig.kSampleRate;
+    }
+
     audio.clip = AudioClip.Create("Oscillator", 0xfffffff, 1, SynthConfig.kSampleRate, false, true, OnAudioRead);
     audio.Play();
 }
@@ -34,8 +40,23 @@ function OnGUI() {
     
     GUI.skin = skin;
     
-    GUILayout.BeginArea(Rect(0.1 * sw, 0.2 * sh, 0.8 * sw, 0.6 * sh));
+    GUILayout.BeginArea(Rect(0.05 * sw, 0.05 * sh, 0.9 * sw, 0.9 * sh));
     GUILayout.BeginVertical();
+
+    GUILayout.BeginHorizontal();
+    GUILayout.Label("Note/Trig");
+    for (var i = 0; i < 16; i++) {
+        GUILayout.BeginVertical();
+        var note = seq.notes[i];
+        var trigger = seq.triggers[i];
+        var noteInput = GUILayout.TextField(note.ToString(), 3);
+        seq.triggers[i] = GUILayout.Toggle(trigger, "");
+        if (System.Int32.TryParse(noteInput, note)) {
+            seq.notes[i] = note;
+        }
+        GUILayout.EndVertical();
+    }
+    GUILayout.EndHorizontal();
     
     GUILayout.BeginHorizontal();
     GUILayout.Label("Cutoff", GUILayout.Width(0.2 * sw));

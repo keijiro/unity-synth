@@ -10,7 +10,7 @@ MonoBehaviour:
   m_EditorHideFlags: 1
   m_Script: {fileID: 12001, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: Controller
-  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Font: {fileID: 12800000, guid: 1846a9e6fa653420ab2e8fa89258679e, type: 1}
   m_box:
     m_Name: box
     m_Normal:
@@ -73,13 +73,13 @@ MonoBehaviour:
   m_button:
     m_Name: button
     m_Normal:
-      m_Background: {fileID: 11006, guid: 0000000000000000e000000000000000, type: 0}
+      m_Background: {fileID: 2800000, guid: 11c5a97c09b8045288f313bba2881516, type: 1}
       m_TextColor: {r: .899999976, g: .899999976, b: .899999976, a: 1}
     m_Hover:
-      m_Background: {fileID: 11003, guid: 0000000000000000e000000000000000, type: 0}
+      m_Background: {fileID: 0}
       m_TextColor: {r: 1, g: 1, b: 1, a: 1}
     m_Active:
-      m_Background: {fileID: 11002, guid: 0000000000000000e000000000000000, type: 0}
+      m_Background: {fileID: 2800000, guid: 0e8da4df2f36946ec87a4a21907d0f4b, type: 1}
       m_TextColor: {r: .899999976, g: .899999976, b: .899999976, a: 1}
     m_Focused:
       m_Background: {fileID: 0}
@@ -132,25 +132,25 @@ MonoBehaviour:
   m_toggle:
     m_Name: toggle
     m_Normal:
-      m_Background: {fileID: 11018, guid: 0000000000000000e000000000000000, type: 0}
+      m_Background: {fileID: 2800000, guid: 11c5a97c09b8045288f313bba2881516, type: 1}
       m_TextColor: {r: .891128957, g: .891128957, b: .891128957, a: 1}
     m_Hover:
-      m_Background: {fileID: 11014, guid: 0000000000000000e000000000000000, type: 0}
+      m_Background: {fileID: 0}
       m_TextColor: {r: 1, g: 1, b: 1, a: 1}
     m_Active:
-      m_Background: {fileID: 11013, guid: 0000000000000000e000000000000000, type: 0}
+      m_Background: {fileID: 0}
       m_TextColor: {r: 1, g: 1, b: 1, a: 1}
     m_Focused:
       m_Background: {fileID: 0}
       m_TextColor: {r: 0, g: 0, b: 0, a: 1}
     m_OnNormal:
-      m_Background: {fileID: 11016, guid: 0000000000000000e000000000000000, type: 0}
+      m_Background: {fileID: 2800000, guid: 0e8da4df2f36946ec87a4a21907d0f4b, type: 1}
       m_TextColor: {r: .890196085, g: .890196085, b: .890196085, a: 1}
     m_OnHover:
-      m_Background: {fileID: 11015, guid: 0000000000000000e000000000000000, type: 0}
+      m_Background: {fileID: 0}
       m_TextColor: {r: 1, g: 1, b: 1, a: 1}
     m_OnActive:
-      m_Background: {fileID: 11017, guid: 0000000000000000e000000000000000, type: 0}
+      m_Background: {fileID: 0}
       m_TextColor: {r: 1, g: 1, b: 1, a: 1}
     m_OnFocused:
       m_Background: {fileID: 0}
@@ -236,7 +236,7 @@ MonoBehaviour:
       m_Bottom: 0
     m_Font: {fileID: 0}
     m_ImagePosition: 0
-    m_Alignment: 0
+    m_Alignment: 4
     m_WordWrap: 1
     m_TextClipping: 1
     m_ContentOffset: {x: 0, y: 0}
@@ -250,16 +250,16 @@ MonoBehaviour:
   m_textField:
     m_Name: textfield
     m_Normal:
-      m_Background: {fileID: 11024, guid: 0000000000000000e000000000000000, type: 0}
+      m_Background: {fileID: 2800000, guid: 11c5a97c09b8045288f313bba2881516, type: 1}
       m_TextColor: {r: .799999952, g: .799999952, b: .799999952, a: 1}
     m_Hover:
-      m_Background: {fileID: 11026, guid: 0000000000000000e000000000000000, type: 0}
+      m_Background: {fileID: 0}
       m_TextColor: {r: .899999976, g: .899999976, b: .899999976, a: 1}
     m_Active:
       m_Background: {fileID: 0}
       m_TextColor: {r: 0, g: 0, b: 0, a: 1}
     m_Focused:
-      m_Background: {fileID: 11026, guid: 0000000000000000e000000000000000, type: 0}
+      m_Background: {fileID: 2800000, guid: 1006de8feb6914c198a960d3f935e0de, type: 1}
       m_TextColor: {r: 1, g: 1, b: 1, a: 1}
     m_OnNormal:
       m_Background: {fileID: 11025, guid: 0000000000000000e000000000000000, type: 0}
@@ -427,7 +427,7 @@ MonoBehaviour:
   m_horizontalSlider:
     m_Name: horizontalslider
     m_Normal:
-      m_Background: {fileID: 11009, guid: 0000000000000000e000000000000000, type: 0}
+      m_Background: {fileID: 2800000, guid: 11c5a97c09b8045288f313bba2881516, type: 1}
       m_TextColor: {r: 0, g: 0, b: 0, a: 1}
     m_Hover:
       m_Background: {fileID: 0}
@@ -472,13 +472,13 @@ MonoBehaviour:
       m_Bottom: -3
     m_Font: {fileID: 0}
     m_ImagePosition: 2
-    m_Alignment: 0
+    m_Alignment: 4
     m_WordWrap: 0
     m_TextClipping: 1
     m_ContentOffset: {x: 0, y: 0}
     m_ClipOffset: {x: 0, y: 0}
     m_FixedWidth: 0
-    m_FixedHeight: 12
+    m_FixedHeight: 24
     m_FontSize: 0
     m_FontStyle: 0
     m_StretchWidth: 1
@@ -486,13 +486,13 @@ MonoBehaviour:
   m_horizontalSliderThumb:
     m_Name: horizontalsliderthumb
     m_Normal:
-      m_Background: {fileID: 11011, guid: 0000000000000000e000000000000000, type: 0}
+      m_Background: {fileID: 2800000, guid: 0e8da4df2f36946ec87a4a21907d0f4b, type: 1}
       m_TextColor: {r: 0, g: 0, b: 0, a: 1}
     m_Hover:
-      m_Background: {fileID: 11012, guid: 0000000000000000e000000000000000, type: 0}
+      m_Background: {fileID: 2800000, guid: 0e8da4df2f36946ec87a4a21907d0f4b, type: 1}
       m_TextColor: {r: 0, g: 0, b: 0, a: 1}
     m_Active:
-      m_Background: {fileID: 11010, guid: 0000000000000000e000000000000000, type: 0}
+      m_Background: {fileID: 2800000, guid: 0e8da4df2f36946ec87a4a21907d0f4b, type: 1}
       m_TextColor: {r: 0, g: 0, b: 0, a: 1}
     m_Focused:
       m_Background: {fileID: 0}
@@ -536,8 +536,8 @@ MonoBehaviour:
     m_TextClipping: 1
     m_ContentOffset: {x: 0, y: 0}
     m_ClipOffset: {x: 0, y: 0}
-    m_FixedWidth: 0
-    m_FixedHeight: 12
+    m_FixedWidth: 24
+    m_FixedHeight: 24
     m_FontSize: 0
     m_FontStyle: 0
     m_StretchWidth: 1
