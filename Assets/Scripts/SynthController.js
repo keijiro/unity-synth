@@ -24,6 +24,10 @@ private var seq = Sequencer(124, [
 private var isRunning = false;
 
 function Awake() {
+    if (AudioSettings.outputSampleRate != SynthConfig.kSampleRate) {
+        AudioSettings.outputSampleRate = SynthConfig.kSampleRate;
+    }
+
     audio.clip = AudioClip.Create("Oscillator", 0xfffffff, 1, SynthConfig.kSampleRate, false, true, OnAudioRead);
     audio.Play();
 }
